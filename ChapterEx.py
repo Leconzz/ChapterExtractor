@@ -8,7 +8,7 @@ import os
 BASE_URL = "https://novelfire.net/book/shadow-slave/chapter-{}"
 OUTPUT_DIR = "./chapters"
 START_CHAPTER = 3001
-END_CHAPTER = 3160  # adjust as needed
+END_CHAPTER = 3001  # adjust as needed
 DELAY_SECONDS = 2  # be polite to the server
 
 HEADERS = {
@@ -36,7 +36,7 @@ def extract_chapter(html):
         return None, []
 
     title_span = soup.find("span", class_="chapter-title")
-    # FIX 1: Extract just the plain text for the title string to use in headers/filenames
+
     title = title_span.get_text(strip=True) if title_span else "Untitled Chapter"
     # print(title[0])
     title = re.sub(r'(\d{4})', r'\1:', title)
@@ -48,11 +48,9 @@ def extract_chapter(html):
             if not tag.get_text(strip=True):
                 tag.decompose()
 
-        # FIX 2: Clean the internal text content *inside* the <p> tag without dropping the tag
         cleaned_text = clean_paragraph_text(p.get_text())
         p.string = cleaned_text
 
-        # FIX 3: Check if the text is empty. If it has text, append the whole tag as a string
         if cleaned_text:  
             paragraphs.append(str(p))
 
@@ -61,9 +59,11 @@ def extract_chapter(html):
 
 def save_chapter(chapter_num, title, paragraphs, output_dir):
     save_chapter.count += 1
+    title_only = re.sub(r'^Chapter\s+\d+:\s*', '', title)
+    title_filepath = re.sub(r'[<>:"/\\|?*]', '', title_only).replace(" ", "_")
     os.makedirs(output_dir, exist_ok=True)
     # FIX 4: Changed file extension to .html since it now contains tags
-    filepath = os.path.join(output_dir, f"{save_chapter.count:03d}_{chapter_num:04d}_{title}.xhtml")
+    filepath = os.path.join(output_dir, f"{save_chapter.count:03d}_{chapter_num:04d}_{title_filepath}.xhtml")
 
     with open(filepath, "w", encoding="utf-8") as f:
         # Optional: Added basic HTML wrappers so it opens nicely in a browser

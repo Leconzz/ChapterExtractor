@@ -1,0 +1,33 @@
+# === Python Virtual Environments ===
+.venv/
+venv/
+ENV/
+env/
+python-env/
+
+# === Python Cache and Compiled Files ===
+__pycache__/
+*.py[cod]
+*$py.class
+
+# === Environment Variables and Secrets ===
+.env
+.env.local
+.env.*.local
+
+# === Testing and Coverage Outputs ===
+.pytest_cache/
+.coverage
+htmlcov/
+nosetests.xml
+.htmlcov/
+
+# === IDEs and Code Editors ===
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# === System Files ===
+.DS_Store
+Thumbs.db

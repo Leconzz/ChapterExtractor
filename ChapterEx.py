@@ -8,8 +8,14 @@ import os
 BASE_URL = "https://novelfire.net/book/shadow-slave/chapter-{}"
 OUTPUT_DIR = "./chapters"
 START_CHAPTER = 3001
-END_CHAPTER = 3001  # adjust as needed
-DELAY_SECONDS = 2  # be polite to the server
+END_CHAPTER = 3001
+
+# If this list is non-empty, it overrides START_CHAPTER/END_CHAPTER
+SPECIFIC_CHAPTERS = [3008, 3010, 3012, 3016, 3020, 3023, 3027, 3042, 3051,
+                      3065, 3073, 3102, 3103, 3113, 3119, 3120, 3128, 3132,
+                      3134, 3137, 3151, 3152, 3154]
+
+DELAY_SECONDS = 2
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
@@ -76,8 +82,8 @@ def save_chapter(chapter_num, title, paragraphs, output_dir):
     print(f"Saved: {filepath}")
 
 save_chapter.count = 0
-def scrape_range(start, end):
-    for chapter_num in range(start, end + 1):
+def scrape_range(chapter_numbers):
+    for chapter_num in chapter_numbers:
         url = BASE_URL.format(chapter_num)
         print(f"Fetching {url} ...")
 
@@ -99,4 +105,7 @@ def scrape_range(start, end):
         time.sleep(DELAY_SECONDS)
 
 if __name__ == "__main__":
-    scrape_range(START_CHAPTER, END_CHAPTER)
+    if SPECIFIC_CHAPTERS:
+        scrape_range(SPECIFIC_CHAPTERS)
+    else:
+        scrape_range(range(START_CHAPTER, END_CHAPTER + 1))

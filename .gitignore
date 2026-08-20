@@ -31,3 +31,6 @@ nosetests.xml
 # === System Files ===
 .DS_Store
 Thumbs.db
+
+# === Specific Folders and Files ===
+chapters/
